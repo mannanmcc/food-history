@@ -8,15 +8,8 @@ import (
 	"github.com/mannanmcc/food-history/api/models"
 )
 
-const (
-	dbHost     = "192.168.33.10"
-	dbUser     = "user"
-	dbPassword = "password"
-	dbName     = "prepaid-card"
-)
-
 func main() {
-	db, err := models.NewDB(dbUser + ":" + dbPassword + "@tcp(" + dbHost + ":3306)/" + dbName + "?charset=utf8&parseTime=True")
+	db, err := models.NewDB("web:web@tcp(db:3306)/foodhistory?charset=utf8&parseTime=True")
 	if err != nil {
 		panic(err)
 	}
@@ -27,5 +20,5 @@ func main() {
 	router := NewRouter(env)
 
 	//log.Fatal(http.ListenAndServeTLS(":8080", "server.crt", "server.key", router))
-	log.Fatal(http.ListenAndServe(":8000", router))
+	log.Fatal(http.ListenAndServe(":3000", router))
 }

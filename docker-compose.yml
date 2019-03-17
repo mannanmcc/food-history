@@ -1,14 +1,29 @@
-api:
-  build: ./api
-  ports: 
-    - 3000:3000
-  volumes:
-    - ./api:/go/src/github.com/mannanmcc/food-history/api
-  links:
-    - database
-  environment:
-    - DB_NAME=project
+version: '3'
 
-database:
-  image: mongo:3.0
-  command: mongod --smallfiles --quiet --logpath=/dev/null
+services:
+  api:
+    build: ./api
+    ports: 
+      - 3000:3000
+    volumes:
+      - ./api:/go/src/github.com/mannanmcc/food-history/api
+    environment:
+      - DB_HOST=localhost
+      - DB_NAME=foodhistory
+      - DB_USER=web
+      - DB_NAME=web
+    tty: true
+    depends_on:
+        - db
+  db:
+      build:
+        context: ./mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: foodhistory
+        MYSQL_USER: web
+        MYSQL_PASSWORD: web
+      container_name: golang_db
+      ports:
+        - "3306:3306"
+      tty: true
